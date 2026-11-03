@@ -1,0 +1,52 @@
+# .aiteam/project.yaml — LoomShift project configuration.
+# Committed by the scaffold itself, so this repo is governed from its first
+# commit rather than running on invisible defaults. Every field here mirrors
+# LoomShift's own defaults; edit freely as the project's needs diverge.
+version: 1
+
+verify:
+  install: npm ci
+  typecheck: npm run typecheck
+  lint: npm run lint
+  # No test step yet — this scaffold ships no test framework or test files.
+  # Add a "test" script (and a framework of your choice), then add "test"
+  # back to policy.requiredChecks below, once you have your first test.
+
+preview:
+  build: npm run build
+  start: npm run start
+  port: 8080
+
+browser:
+  checks: []
+
+policy:
+  blockedPaths:
+    - '.github/workflows/**'
+    - 'migrations/**'
+    - 'infra/prod/**'
+    - '**/.env'
+  commands:
+    allow: []
+    deny: []
+  egress:
+    mode: install-only
+  secrets:
+    mode: inherit
+    allow: []
+  requiredChecks:
+    - typecheck
+    - lint
+  maxChangedFiles: 50
+  maxDurationMs: 1800000
+  maxCostUsd: 4.5
+  maxAttempts: 3
+  approval:
+    mode: human
+  onBaseChange: rebase
+  prGate: auto_open
+  previewTtlHours: 24
+
+evidence:
+  minCriterionLevel: L1
+  requireVerifier: false

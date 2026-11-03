@@ -1,0 +1,9 @@
+# Firebase App Hosting configuration for this app's backend.
+#
+# Kept small on purpose: the instance cap bounds what a traffic spike, or a
+# runaway loop, can cost on a pay-as-you-go plan. Raise it when you need to.
+runConfig:
+  cpu: 1
+  memoryMiB: 512
+  minInstances: 0
+  maxInstances: 2
