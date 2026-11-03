@@ -48,7 +48,16 @@ npm run dev         # in a second terminal
 - `lib/firebase.ts` builds the Firebase clients. With no
   `NEXT_PUBLIC_FIREBASE_PROJECT_ID` set it uses the emulators.
 - `firestore.rules` is the security policy. It is closed by default: each signed-in
-  person can read and write only their own `notes`. Open a new path on purpose, and
-  review every change to this file.
+  person can read and write only their own `notes`, `connectedAccounts` and `posts`.
+  Open a new path on purpose, and review every change to this file.
 - `apphosting.yaml` sets the limits for Firebase App Hosting, where this app is
   deployed once a Firebase project is connected.
+
+## Accounts and the calendar
+
+- `/sign-in` holds the sign-up and sign-in form. A visitor who is already signed in is
+  sent on to `/calendar`.
+- `/calendar` is the private, signed-in area. `components/AuthGate.tsx` sends a
+  signed-out visitor to `/sign-in` instead of showing it.
+- `/` redirects to `/calendar`.
+- `npm test` runs the component tests (Vitest + Testing Library).
