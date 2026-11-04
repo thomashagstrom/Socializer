@@ -8,9 +8,7 @@ verify:
   install: npm ci
   typecheck: npm run typecheck
   lint: npm run lint
-  # No test step yet — this scaffold ships no test framework or test files.
-  # Add a "test" script (and a framework of your choice), then add "test"
-  # back to policy.requiredChecks below, once you have your first test.
+  test: npm run test
 
 preview:
   build: npm run build
@@ -37,6 +35,7 @@ policy:
   requiredChecks:
     - typecheck
     - lint
+    - test
   maxChangedFiles: 50
   maxDurationMs: 1800000
   maxCostUsd: 4.5

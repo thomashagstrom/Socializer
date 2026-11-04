@@ -11,6 +11,24 @@ service cloud.firestore {
         && request.resource.data.uid == request.auth.uid;
     }
 
+    // Each signed-in person can read and write only their own connected accounts.
+    match /connectedAccounts/{accountId} {
+      allow read, delete: if request.auth != null && resource.data.uid == request.auth.uid;
+      allow create: if request.auth != null && request.resource.data.uid == request.auth.uid;
+      allow update: if request.auth != null
+        && resource.data.uid == request.auth.uid
+        && request.resource.data.uid == request.auth.uid;
+    }
+
+    // Each signed-in person can read and write only their own scheduled posts.
+    match /posts/{postId} {
+      allow read, delete: if request.auth != null && resource.data.uid == request.auth.uid;
+      allow create: if request.auth != null && request.resource.data.uid == request.auth.uid;
+      allow update: if request.auth != null
+        && resource.data.uid == request.auth.uid
+        && request.resource.data.uid == request.auth.uid;
+    }
+
     // Everything else is closed. Open a path here on purpose, never by default.
   }
 }
