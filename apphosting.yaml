@@ -7,3 +7,24 @@ runConfig:
   memoryMiB: 512
   minInstances: 0
   maxInstances: 2
+env:
+  - variable: NEXT_PUBLIC_FIREBASE_API_KEY
+    value: AIzaSyDaGSUZnImeDHLdewWPa50jT-OcUE6krxQ
+    availability:
+      - BUILD
+      - RUNTIME
+  - variable: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+    value: socializer-r83wv.firebaseapp.com
+    availability:
+      - BUILD
+      - RUNTIME
+  - variable: NEXT_PUBLIC_FIREBASE_PROJECT_ID
+    value: socializer-r83wv
+    availability:
+      - BUILD
+      - RUNTIME
+  - variable: NEXT_PUBLIC_FIREBASE_APP_ID
+    value: 1:439591679273:web:19e0b657394a5e1f1c3338
+    availability:
+      - BUILD
+      - RUNTIME
