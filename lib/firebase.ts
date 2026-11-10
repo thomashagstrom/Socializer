@@ -1,6 +1,7 @@
 import { getApp, getApps, initializeApp, type FirebaseApp } from 'firebase/app';
 import { connectAuthEmulator, getAuth, type Auth } from 'firebase/auth';
 import { connectFirestoreEmulator, getFirestore, type Firestore } from 'firebase/firestore';
+import { connectStorageEmulator, getStorage, type FirebaseStorage } from 'firebase/storage';
 
 // Read as literal `process.env.NEXT_PUBLIC_*` expressions on purpose: Next.js
 // only inlines them into the browser bundle when spelled out like this.
@@ -22,6 +23,7 @@ export interface FirebaseClients {
   app: FirebaseApp;
   auth: Auth;
   db: Firestore;
+  storage: FirebaseStorage;
 }
 
 let clients: FirebaseClients | undefined;
@@ -36,10 +38,12 @@ export function getFirebase(): FirebaseClients {
   const app = getApps().length > 0 ? getApp() : initializeApp(config);
   const auth = getAuth(app);
   const db = getFirestore(app);
+  const storage = getStorage(app, `gs://${config.projectId}.firebasestorage.app`);
   if (usingEmulators) {
     connectAuthEmulator(auth, 'http://127.0.0.1:9099', { disableWarnings: true });
     connectFirestoreEmulator(db, '127.0.0.1', 8081);
+    connectStorageEmulator(storage, '127.0.0.1', 9199);
   }
-  clients = { app, auth, db };
+  clients = { app, auth, db, storage };
   return clients;
 }
