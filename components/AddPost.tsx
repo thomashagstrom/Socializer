@@ -27,15 +27,11 @@ export default function AddPost({ user }: { user: User }) {
   const [caption, setCaption] = useState('');
   const [selected, setSelected] = useState<string[]>([]);
   const [when, setWhen] = useState('');
-  const [timeZone, setTimeZone] = useState('');
+  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const [errors, setErrors] = useState<string[]>([]);
   const [mediaError, setMediaError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [saved, setSaved] = useState(false);
-
-  useEffect(() => {
-    setTimeZone(Intl.DateTimeFormat().resolvedOptions().timeZone);
-  }, []);
 
   useEffect(() => {
     const q = query(collection(getFirebase().db, 'connectedAccounts'), where('uid', '==', uid));
@@ -59,23 +55,22 @@ export default function AddPost({ user }: { user: User }) {
   }, [uid]);
 
   useEffect(() => {
-    if (!file) {
-      setPreviewUrl(null);
-      return;
-    }
-    const url = URL.createObjectURL(file);
-    setPreviewUrl(url);
-    return () => URL.revokeObjectURL(url);
-  }, [file]);
+    if (!previewUrl) return;
+    return () => URL.revokeObjectURL(previewUrl);
+  }, [previewUrl]);
 
   async function chooseFile(chosen: File | undefined) {
     setSaved(false);
     setMediaError(null);
     setFile(null);
+    setPreviewUrl(null);
     if (!chosen) return;
     const problem = await checkMedia(chosen);
     if (problem) setMediaError(problem);
-    else setFile(chosen);
+    else {
+      setFile(chosen);
+      setPreviewUrl(URL.createObjectURL(chosen));
+    }
   }
 
   function toggle(id: string) {
@@ -118,7 +113,8 @@ export default function AddPost({ user }: { user: User }) {
         createdAt: serverTimestamp(),
       });
       setFile(null);
-      setCaption('');
+      setPreviewUrl(null);
+setCaption('');
       setSelected([]);
       setWhen('');
       setSaved(true);
