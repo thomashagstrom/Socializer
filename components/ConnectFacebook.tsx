@@ -96,6 +96,7 @@ export default function ConnectFacebook({ user }: { user: User }) {
         setAvailable(pages);
       }
     } catch (e) {
+  console.error('Facebook connect failed', e);
       const code = (e as { code?: string }).code;
       setError(
         code === 'auth/popup-closed-by-user' ||
