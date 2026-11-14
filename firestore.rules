@@ -20,13 +20,18 @@ service cloud.firestore {
         && request.resource.data.uid == request.auth.uid;
     }
 
-    // Each signed-in person can read and write only their own scheduled posts.
+    // Each signed-in person can read and write only their own posts, and only
+    // while a post is still scheduled: once it is published it is read-only.
     match /posts/{postId} {
-      allow read, delete: if request.auth != null && resource.data.uid == request.auth.uid;
+      allow read: if request.auth != null && resource.data.uid == request.auth.uid;
+      allow delete: if request.auth != null
+        && resource.data.uid == request.auth.uid
+        && resource.data.status == 'scheduled';
       allow create: if request.auth != null && request.resource.data.uid == request.auth.uid;
       allow update: if request.auth != null
         && resource.data.uid == request.auth.uid
-        && request.resource.data.uid == request.auth.uid;
+        && request.resource.data.uid == request.auth.uid
+        && resource.data.status == 'scheduled';
     }
 
     // Everything else is closed. Open a path here on purpose, never by default.
